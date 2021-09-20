@@ -1,0 +1,13 @@
+[Unit]
+Description=Daemon which restores the current playlist after hard reboots
+After=mopidy.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+StartLimitBurst=0
+StartLimitIntervalSec=60
+ExecStart=/usr/local/bin/mopidy-restorer
+
+[Install]
+WantedBy=multi-user.target

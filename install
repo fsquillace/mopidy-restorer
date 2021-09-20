@@ -1,0 +1,16 @@
+#! /bin/sh
+
+set -e
+
+echo "=> Installing Mopidy Restorer...\n"
+sudo cp mopidy-restorer /usr/local/bin/
+sudo chmod +x /usr/local/bin/mopidy-restorer
+
+echo "=> Starting Mopidy Restorer via Systemd...\n"
+sudo cp mopidy-restorer.service /lib/systemd/system/mopidy-restorer.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable mopidy-restorer.service
+sudo systemctl restart mopidy-restorer.service
+
+echo "Mopidy Restorer installed."

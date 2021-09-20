@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo Restoring the previous playlist in current-playlist
+mpc clear
+mpc load current-playlist || echo mpc load failed
+echo Restored the playlist from current-playlist. Sleeping for 3600 secs...
+mpc random on
+mpc repeat on
+sleep 3600
+
+while true
+do
+    echo Saving the current playlist to current-playlist...
+    mpc save current-playlist
+    echo Saved the current playlist to current-playlist. Sleeping for 3600 secs...
+    sleep 3600
+done
