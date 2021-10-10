@@ -2,7 +2,8 @@
 
 set -e
 
-CACHE_DIR="$HOME/.cache/mopidy/youtube"
+CACHE_DIR="/home/pi/.cache/mopidy/youtube"
+CURRENT_STATUS_FILE="/home/pi/.local/share/mopidy/current_status"
 # 5 GB limit:
 MAX_DIR_SIZE="$((1024 * 1024 * 5000))"
 
@@ -25,12 +26,12 @@ function remove_old_youtube_cache() {
 }
 
 function restore_status() {
-    if [[ ! -e $HOME/.local/share/mopidy/current_status ]]
+    if [[ ! -e $CURRENT_STATUS_FILE ]]
     then
         return 0
     fi
     # sed command ensure there are no spaces between colon
-    statuses=($(cat $HOME/.local/share/mopidy/current_status | grep volume | sed -e 's/ *: */:/g' -e 's/%//g' ))
+    statuses=($(cat $CURRENT_STATUS_FILE | grep volume | sed -e 's/ *: */:/g' -e 's/%//g' ))
     for status in "${statuses[@]}"
     do
         mpc $(echo $status | sed 's/:/ /g')
@@ -54,7 +55,7 @@ while true
 do
     echo Saving the current playlist to current-playlist...
     mpc save current-playlist
-    mpc status > $HOME/.local/share/mopidy/current_status
+    mpc status > $CURRENT_STATUS_FILE
     echo Saved the current playlist to current-playlist.
     echo Removing old Youtube cache files...
     remove_old_youtube_cache
