@@ -38,6 +38,22 @@ function restore_status() {
     done
 }
 
+function change_playlist() {
+    cd /home/pi/.local/share/mopidy/m3u/
+    local playlist="current-playlist"
+    while [[ "$playlist" == "current-playlist" ]]
+    do
+        echo "Randomly selecting playlist..."
+        playlist=$(ls . | shuf | head -n 1 | sed -e 's/\.m3u8$//g')
+        echo "Selected '$playlist' playlist"
+        sleep 1
+    done
+    echo "Loading '$playlist' playlist..."
+    mpc clear
+    mpc load "$playlist"
+    cd $OLDPWD
+}
+
 echo Restoring the previous playlist in current-playlist
 mpc clear
 mpc load current-playlist || echo mpc load failed
@@ -60,6 +76,14 @@ do
     echo Removing old Youtube cache files...
     remove_old_youtube_cache
     echo Removed old Youtube cache files
+
+    hour=$(date +"%A-%H")
+    echo "Current hour is $hour"
+    if [[ $hour == "Monday-00" ]]
+    then
+        echo "Triggering playlist change because hour is $hour..."
+        change_playlist
+    fi
 
     echo Sleeping for 3600 secs...
     sleep 3600
