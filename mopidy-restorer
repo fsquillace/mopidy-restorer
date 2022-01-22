@@ -77,12 +77,18 @@ do
     remove_old_youtube_cache
     echo Removed old Youtube cache files
 
-    hour=$(date +"%A-%H")
-    echo "Current hour is $hour"
-    if [[ $hour == "Monday-00" ]]
+    day_of_week_number=$(date +"%u")
+    echo "Current day of week number is $day_of_week_number"
+    if [[ $(( $day_of_week_number % 2 )) == 0 ]]
     then
-        echo "Triggering playlist change because hour is $hour..."
-        change_playlist
+        hour=$(date +"%H")
+        echo "Current hour is $hour"
+        if [[ $hour == "00" ]]
+        then
+            echo "Triggering playlist change because hour is $hour and day of week number is $day_of_week_number..."
+            change_playlist
+        fi
+
     fi
 
     echo Sleeping for 3600 secs...
