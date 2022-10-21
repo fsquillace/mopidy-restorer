@@ -4,8 +4,8 @@ set -e
 
 CACHE_DIR="/home/pi/.cache/mopidy/youtube"
 CURRENT_STATUS_FILE="/home/pi/.local/share/mopidy/current_status"
-# 5 GB limit:
-MAX_DIR_SIZE="$((1024 * 1024 * 5000))"
+# 20 GB limit:
+MAX_DIR_SIZE="$((1024 * 1024 * 20000))"
 
 function remove_old_youtube_cache() {
     # https://stackoverflow.com/questions/11618144/bash-script-to-limit-a-directory-size-by-deleting-files-accessed-last
@@ -50,13 +50,13 @@ function change_playlist() {
     done
     echo "Loading '$playlist' playlist..."
     mpc clear
-    mpc load "$playlist"
+    mpc --verbose load "$playlist" || echo "mpc load $playlist failed. Skipping..."
     cd $OLDPWD
 }
 
 echo Restoring the previous playlist in current-playlist
 mpc clear
-mpc load current-playlist || echo mpc load failed
+mpc load current-playlist || echo "mpc load current-playlist failed. Skipping..."
 restore_status
 echo Restored the playlist from current-playlist.
 

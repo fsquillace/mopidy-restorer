@@ -6,7 +6,6 @@ After=mopidy.service
 TimeoutStartSec=0
 Restart=always
 StartLimitBurst=0
-StartLimitIntervalSec=60
 ExecStart=/usr/local/bin/mopidy-restorer
 
 [Install]
